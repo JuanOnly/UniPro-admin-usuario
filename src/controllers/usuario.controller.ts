@@ -1,3 +1,4 @@
+import {authenticate} from '@loopback/authentication';
 import {service} from '@loopback/core';
 import {
   Count,
@@ -5,7 +6,7 @@ import {
   Filter,
   FilterExcludingWhere,
   repository,
-  Where
+  Where,
 } from '@loopback/repository';
 import {
   del,
@@ -16,7 +17,7 @@ import {
   post,
   put,
   requestBody,
-  response
+  response,
 } from '@loopback/rest';
 import {Configuraciones} from '../config/configuraciones';
 import {
@@ -25,15 +26,16 @@ import {
   CredencialesRecuperarClave,
   NotificacionCorreo,
   NotificacionSms,
-  Usuario
+  Usuario,
 } from '../models';
 import {UsuarioRepository} from '../repositories';
 import {
   AdministradorDeClavesService,
   NotificacionesService,
-  SesionUsuariosService
+  SesionUsuariosService,
 } from '../services';
 
+@authenticate('admin') //@authenticate.skip()
 export class UsuarioController {
   constructor(
     @repository(UsuarioRepository)
@@ -78,6 +80,7 @@ export class UsuarioController {
     return this.usuarioRepository.create(usuario);
   }
 
+  @authenticate.skip()
   @get('/usuarios/count')
   @response(200, {
     description: 'Usuario model count',
@@ -87,6 +90,7 @@ export class UsuarioController {
     return this.usuarioRepository.count(where);
   }
 
+  @authenticate.skip()
   @get('/usuarios')
   @response(200, {
     description: 'Array of Usuario model instances',
@@ -124,6 +128,7 @@ export class UsuarioController {
     return this.usuarioRepository.updateAll(usuario, where);
   }
 
+  @authenticate.skip()
   @get('/usuarios/{id}')
   @response(200, {
     description: 'Usuario model instance',
@@ -134,7 +139,7 @@ export class UsuarioController {
     },
   })
   async findById(
-    @param.path.string('id') id: string,
+    @param.path.number('id') id: number,
     @param.filter(Usuario, {exclude: 'where'})
     filter?: FilterExcludingWhere<Usuario>,
   ): Promise<Usuario> {
@@ -146,7 +151,7 @@ export class UsuarioController {
     description: 'Usuario PATCH success',
   })
   async updateById(
-    @param.path.string('id') id: string,
+    @param.path.number('id') id: number,
     @requestBody({
       content: {
         'application/json': {
@@ -164,7 +169,7 @@ export class UsuarioController {
     description: 'Usuario PUT success',
   })
   async replaceById(
-    @param.path.string('id') _id: string,
+    @param.path.number('id') _id: number,
     @requestBody() usuario: Usuario,
   ): Promise<void> {
     await this.usuarioRepository.replaceById(_id, usuario);
@@ -174,7 +179,7 @@ export class UsuarioController {
   @response(204, {
     description: 'Usuario DELETE success',
   })
-  async deleteById(@param.path.string('id') _id: string): Promise<void> {
+  async deleteById(@param.path.number('id') _id: number): Promise<void> {
     await this.usuarioRepository.deleteById(_id);
   }
 

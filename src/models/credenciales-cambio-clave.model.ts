@@ -3,10 +3,10 @@ import {Model, model, property} from '@loopback/repository';
 @model()
 export class CredencialesCambioClave extends Model {
   @property({
-    type: 'string',
+    type: 'number',
     required: true,
   })
-  id: string;
+  id: number;
 
   @property({
     type: 'string',
@@ -20,7 +20,6 @@ export class CredencialesCambioClave extends Model {
   })
   nueva_clave: string;
 
-
   constructor(data?: Partial<CredencialesCambioClave>) {
     super(data);
   }
@@ -30,4 +29,5 @@ export interface CredencialesCambioClaveRelations {
   // describe navigational properties here
 }
 
-export type CredencialesCambioClaveWithRelations = CredencialesCambioClave & CredencialesCambioClaveRelations;
+export type CredencialesCambioClaveWithRelations = CredencialesCambioClave &
+  CredencialesCambioClaveRelations;
