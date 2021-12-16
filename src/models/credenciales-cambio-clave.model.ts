@@ -6,7 +6,7 @@ export class CredencialesCambioClave extends Model {
     type: 'number',
     required: true,
   })
-  id: number;
+  _id: number;
 
   @property({
     type: 'string',

@@ -200,7 +200,8 @@ export class UsuarioController {
     let usuario = await this.servicioSesionUsuario.ValidarCredenciales(
       credenciales,
     );
-    let token = '';
+    let token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub21icmUiOiJKdWFuIEdhcmNpYSIsImlkIjoiNjFhMTY2MTgyNGM5YjkyZGVjMWU2MWNiIiwicm9sIjoiNjE5ZmM0YzUxMmJjNGYzYjA4Zjk4OTAwIn0.0-5lP18BurVBEP3XnJ_-IG9Ox1TTg7cyg9d0OwZWdzA';
     if (usuario) {
       usuario.clave = '';
       token = await this.servicioSesionUsuario.CrearToken(usuario);
@@ -253,12 +254,12 @@ export class UsuarioController {
   async cambiarClave(
     @requestBody() datos: CredencialesCambioClave,
   ): Promise<Boolean> {
-    let usuario = await this.usuarioRepository.findById(datos.id);
+    let usuario = await this.usuarioRepository.findById(datos._id);
     if (usuario) {
       if (usuario.clave == datos.clave_actual) {
         usuario.clave = datos.nueva_clave;
         console.log(datos.nueva_clave);
-        await this.usuarioRepository.updateById(datos.id, usuario);
+        await this.usuarioRepository.updateById(datos._id, usuario);
         // enviar email al usuario notificando el cambio de contraseña
 
         let notificacion = new NotificacionCorreo();
